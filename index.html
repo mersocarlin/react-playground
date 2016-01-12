@@ -38,7 +38,7 @@
         },
 
         render () {
-          const { onClick, text, type} = this.props;
+          const { onClick, text, type } = this.props;
           const cssClass = `btn btn-${type}`;
 
           return (
@@ -57,11 +57,17 @@
           title: React.PropTypes.string.isRequired,
         },
 
+        handleClick () {
+          const { id, onClick } = this.props;
+
+          onClick(id);
+        },
+
         render () {
-          const { id, body, onClick, title } = this.props;
+          const { body, title } = this.props;
 
           return (
-            <a onClick={() => { onClick(id); }} href="#" className="list-group-item">
+            <a onClick={this.handleClick} href="#" className="list-group-item">
               <h4 className="list-group-item-heading">{title}</h4>
               <p className="list-group-item-text">{body}</p>
             </a>
@@ -170,6 +176,13 @@
           });
         },
 
+        handleChange (e) {
+          const state = this.state;
+          state[e.target.name] = e.target.value;
+
+          this.setState(state);
+        },
+
         render () {
           const { skills, body, title } = this.state;
 
@@ -180,8 +193,9 @@
                   <label>Title</label>
                   <input
                     type="text"
+                    name="title"
                     className="form-control"
-                    onChange={(e) => this.setState({ title: e.target.value })}
+                    onChange={this.handleChange}
                     value={title}
                   />
                 </div>
@@ -189,8 +203,9 @@
                   <label>Body</label>
                   <input
                     type="text"
+                    name="body"
                     className="form-control"
-                    onChange={(e) => this.setState({ body: e.target.value })}
+                    onChange={this.handleChange}
                     value={body}
                   />
                 </div>
