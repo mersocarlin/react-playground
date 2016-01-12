@@ -13,6 +13,6 @@ export default React.createClass({
           <FormSkills />
         </div>
       </div>
-    )
-  }
+    );
+  },
 });

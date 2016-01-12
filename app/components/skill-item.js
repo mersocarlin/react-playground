@@ -9,14 +9,20 @@ export default React.createClass({
     title: React.PropTypes.string.isRequired,
   },
 
+  handleClick () {
+    const { id, onClick } = this.props;
+
+    onClick(id);
+  },
+
   render () {
-    const { id, body, onClick, title } = this.props;
+    const { body, title } = this.props;
 
     return (
-      <a onClick={() => { onClick(id); }} href="#" className="list-group-item">
+      <a onClick={this.handleClick} href="#" className="list-group-item">
         <h4 className="list-group-item-heading">{title}</h4>
         <p className="list-group-item-text">{body}</p>
       </a>
     );
-  }
+  },
 });

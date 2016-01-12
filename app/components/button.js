@@ -6,7 +6,7 @@ export default React.createClass({
     onClick: React.PropTypes.func.isRequired,
     text: React.PropTypes.string.isRequired,
     type: React.PropTypes.oneOf([
-      'default', 'primary', 'success', 'info', 'warning', 'danger'
+      'default', 'primary', 'success', 'info', 'warning', 'danger',
     ]),
   },
 
@@ -18,7 +18,7 @@ export default React.createClass({
   },
 
   render () {
-    const { onClick, text, type} = this.props;
+    const { onClick, text, type } = this.props;
     const cssClass = `btn btn-${type}`;
 
     return (
@@ -26,5 +26,5 @@ export default React.createClass({
         {text}
       </a>
     );
-  }
+  },
 });

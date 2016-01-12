@@ -7,6 +7,6 @@ import App from './containers/app';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 render(
-  <App  />,
+  <App />,
   document.getElementById('main')
 );

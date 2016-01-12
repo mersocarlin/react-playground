@@ -73,6 +73,13 @@ export default React.createClass({
     });
   },
 
+  handleChange (e) {
+    const state = this.state;
+    state[e.target.name] = e.target.value;
+
+    this.setState(state);
+  },
+
   render () {
     const { skills, body, title } = this.state;
 
@@ -83,8 +90,9 @@ export default React.createClass({
             <label>Title</label>
             <input
               type="text"
+              name="title"
               className="form-control"
-              onChange={(e) => this.setState({ title: e.target.value })}
+              onChange={this.handleChange}
               value={title}
             />
           </div>
@@ -92,8 +100,9 @@ export default React.createClass({
             <label>Body</label>
             <input
               type="text"
+              name="body"
               className="form-control"
-              onChange={(e) => this.setState({ body: e.target.value })}
+              onChange={this.handleChange}
               value={body}
             />
           </div>
@@ -115,5 +124,5 @@ export default React.createClass({
         />
       </div>
     );
-  }
-})
+  },
+});
