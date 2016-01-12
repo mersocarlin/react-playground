@@ -7,10 +7,13 @@
     <title>React Playground</title>
 
     <link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
   </head>
   <body>
 
-    <div id="main"></div>
+    <div class="container">
+      <div id="main"></div>
+    </div>
 
     <script src="js/jquery/jquery-2.2.0.min.js"></script>
     <script src="js/bootstrap/js/bootstrap.min.js"></script>
@@ -22,6 +25,7 @@
 
       const Button = React.createClass({
         propTypes: {
+          onClick: React.PropTypes.func.isRequired,
           text: React.PropTypes.string.isRequired,
           type: React.PropTypes.oneOf(buttonTypes),
         },
@@ -33,31 +37,186 @@
           };
         },
 
-        render: function () {
-          const { size, text, type} = this.props;
+        render () {
+          const { onClick, text, type} = this.props;
           const cssClass = `btn btn-${type}`;
 
           return (
-            <a className={cssClass} href="#" role="button">
+            <a onClick={onClick} className={cssClass} href="#" role="button">
               {text}
             </a>
-          )
+          );
         }
       });
 
-      const buttons = buttonTypes
-        .map((type, idx) => {
+      const SkillItem = React.createClass({
+        propTypes: {
+          id: React.PropTypes.number.isRequired,
+          body: React.PropTypes.string.isRequired,
+          onClick: React.PropTypes.func.isRequired,
+          title: React.PropTypes.string.isRequired,
+        },
+
+        render () {
+          const { id, body, onClick, title } = this.props;
+
           return (
-            <Button
-              key={idx}
-              type={type}
-              text={`Button ${idx}`}
-            />
-          )
-        });
+            <a onClick={() => { onClick(id); }} href="#" className="list-group-item">
+              <h4 className="list-group-item-heading">{title}</h4>
+              <p className="list-group-item-text">{body}</p>
+            </a>
+          );
+        }
+      });
+
+      const SkillList = React.createClass({
+        propTypes: {
+          onClick: React.PropTypes.func,
+          skills: React.PropTypes.array,
+        },
+
+        render () {
+          const { onClick, skills } = this.props;
+
+          return (
+            <div className="list-group">
+              {
+                !skills.length && <div className="empty-list">Your skill list is empty.</div>
+              }
+              {
+                skills.map((skill, idx) => {
+                  const { id, title, body } = skill;
+
+                  return (
+                    <SkillItem
+                      key={idx}
+                      id={id}
+                      body={body}
+                      onClick={onClick}
+                      title={title}
+                    />
+                  );
+                })
+              }
+            </div>
+          );
+        }
+      });
+
+      const FormSkills = React.createClass({
+        getInitialState () {
+          return {
+            body: '',
+            id: 0,
+            skills: [],
+            title: '',
+          };
+        },
+
+        handleSkillItemClick (skillId) {
+          const { skills } = this.state;
+          const skill = skills.find(s => s.id === skillId);
+
+          if (!skill) {
+            return null;
+          }
+
+          this.setState({
+            id: skill.id,
+            body: skill.body,
+            title: skill.title,
+          });
+        },
+
+        handleNewSkill (e) {
+          e.preventDefault();
+
+          this.setState({
+            id: 0,
+            body: '',
+            title: '',
+          });
+        },
+
+        handleSubmit (e) {
+          e.preventDefault();
+
+          const { id, skills, body, title } = this.state;
+
+          if (!body || !title) {
+            return null;
+          }
+
+          if (id === 0) {
+            skills.push({
+              id: skills.length + 1,
+              title,
+              body,
+            });
+          } else {
+            const index = skills.findIndex(s => s.id === id);
+            skills[index] = {
+              id,
+              body,
+              title,
+            };
+          }
+
+          this.setState({
+            skills,
+            id: 0,
+            title: '',
+            body: '',
+          });
+        },
+
+        render () {
+          const { skills, body, title } = this.state;
+
+          return (
+            <div className="form-skills">
+              <form onSubmit={this.handleSubmit}>
+                <div className="form-group">
+                  <label>Title</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    onChange={(e) => this.setState({ title: e.target.value })}
+                    value={title}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Body</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    onChange={(e) => this.setState({ body: e.target.value })}
+                    value={body}
+                  />
+                </div>
+                <Button
+                  onClick={this.handleNewSkill}
+                  text="New"
+                  type="primary"
+                />
+                <Button
+                  onClick={this.handleSubmit}
+                  text="Save"
+                  type="info"
+                />
+              </form>
+
+              <SkillList
+                onClick={this.handleSkillItemClick}
+                skills={skills}
+              />
+            </div>
+          );
+        }
+      });
 
       ReactDOM.render(
-        <div>{buttons}</div>,
+        <FormSkills />,
         document.getElementById('main')
       );
     </script>

@@ -1,0 +1,17 @@
+#main {
+  margin-top: 2em;
+}
+
+#main .form-skills .btn {
+  margin-right: 0.5em;
+}
+
+.list-group {
+  margin-top: 1em;
+}
+
+.empty-list {
+  margin-top: 1em;
+  font-style: italic;
+  text-align: center;
+}
