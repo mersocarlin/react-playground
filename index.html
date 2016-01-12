@@ -2,27 +2,62 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>React Playground</title>
+
+    <link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
   </head>
   <body>
+
     <div id="main"></div>
 
+    <script src="js/jquery/jquery-2.2.0.min.js"></script>
+    <script src="js/bootstrap/js/bootstrap.min.js"></script>
     <script src="js/react-0.14.6.js"></script>
     <script src="js/react-dom-0.14.6.js"></script>
     <script src="js/babel/browser.min.js"></script>
     <script type="text/babel">
-      var MyReactComponent = React.createClass({
+      const buttonTypes = ['default', 'primary', 'success', 'info', 'warning', 'danger'];
+
+      const Button = React.createClass({
+        propTypes: {
+          text: React.PropTypes.string.isRequired,
+          type: React.PropTypes.oneOf(buttonTypes),
+        },
+
+        getDefaultProps () {
+          return {
+            size: '',
+            type: 'default',
+          };
+        },
+
         render: function () {
+          const { size, text, type} = this.props;
+          const cssClass = `btn btn-${type}`;
+
           return (
-            <div>
-              My React Component
-            </div>
+            <a className={cssClass} href="#" role="button">
+              {text}
+            </a>
           )
         }
       });
 
+      const buttons = buttonTypes
+        .map((type, idx) => {
+          return (
+            <Button
+              key={idx}
+              type={type}
+              text={`Button ${idx}`}
+            />
+          )
+        });
+
       ReactDOM.render(
-        <MyReactComponent />,
+        <div>{buttons}</div>,
         document.getElementById('main')
       );
     </script>
