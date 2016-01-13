@@ -11,29 +11,58 @@ export default React.createClass({
     skills: React.PropTypes.array,
   },
 
+  getInitialState () {
+    return {
+      skills: this.props.skills,
+    };
+  },
+
+  handleChange (e) {
+    const value = e.target.value.toLowerCase();
+    let { skills } = this.props;
+
+    if (value) {
+      skills = skills
+        .filter(skill =>
+          skill.title.toLowerCase().indexOf(value) !== -1 ||
+          skill.body.toLowerCase().indexOf(value) !== -1);
+    }
+
+    this.setState({
+      skills,
+    });
+  },
+
   render () {
-    const { onClick, skills } = this.props;
+    const { onClick } = this.props;
+    const { skills } = this.state;
 
     return (
-      <div className="list-group skill-list">
-        {
-          !skills.length && <div className="empty-list">Your skill list is empty.</div>
-        }
-        {
-          skills.map((skill, idx) => {
-            const { id, title, body } = skill;
+      <div className="skill-list">
+        <input
+          type="text"
+          onChange={this.handleChange}
+          className="form-control searchbox"
+          placeholder="Type to search.."
+        />
+        {!skills.length && <div className="empty-list">Your skill list is empty.</div> }
+        <div className="list-group">
+          {
+            skills.map((skill, idx) => {
+              const { id, title, body } = skill;
 
-            return (
-              <SkillItem
-                key={idx}
-                id={id}
-                body={body}
-                onClick={onClick}
-                title={title}
-              />
-            );
-          })
-        }
+              return (
+                <SkillItem
+                  key={idx}
+                  id={id}
+                  body={body}
+                  onClick={onClick}
+                  title={title}
+                />
+              );
+            })
+          }
+        </div>
       </div>
     );
   },
