@@ -9,12 +9,25 @@ export default React.createClass({
   propTypes: {
     onClick: React.PropTypes.func,
     skills: React.PropTypes.array,
+    shouldUpdate: React.PropTypes.bool.isRequired,
   },
 
   getInitialState () {
     return {
+      search: '',
       skills: this.props.skills,
     };
+  },
+
+  componentWillReceiveProps (nextProps) {
+    if (!nextProps.shouldUpdate) {
+      return;
+    }
+
+    this.setState({
+      search: '',
+      skills: nextProps.skills,
+    });
   },
 
   handleChange (e) {
@@ -29,13 +42,14 @@ export default React.createClass({
     }
 
     this.setState({
+      search: e.target.value,
       skills,
     });
   },
 
   render () {
     const { onClick } = this.props;
-    const { skills } = this.state;
+    const { skills, search } = this.state;
 
     return (
       <div className="skill-list">
@@ -44,6 +58,7 @@ export default React.createClass({
           onChange={this.handleChange}
           className="form-control searchbox"
           placeholder="Type to search.."
+          value={search}
         />
         {!skills.length && <div className="empty-list">Your skill list is empty.</div> }
         <div className="list-group">

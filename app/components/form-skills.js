@@ -2,7 +2,7 @@ import React from 'react';
 
 import Button from './button';
 import SkillList from './skill-list';
-
+import skillsFixture from '../fixture/skills-sample';
 import './form-skills.scss';
 
 
@@ -11,8 +11,9 @@ export default React.createClass({
     return {
       body: '',
       id: 0,
-      skills: [],
+      skills: skillsFixture,
       title: '',
+      shouldUpdateList: true,
     };
   },
 
@@ -28,6 +29,7 @@ export default React.createClass({
       id: skill.id,
       body: skill.body,
       title: skill.title,
+      shouldUpdateList: false,
     });
   },
 
@@ -38,6 +40,7 @@ export default React.createClass({
       id: 0,
       body: '',
       title: '',
+      shouldUpdateList: true,
     });
   },
 
@@ -70,6 +73,7 @@ export default React.createClass({
       id: 0,
       title: '',
       body: '',
+      shouldUpdateList: true,
     });
   },
 
@@ -81,7 +85,7 @@ export default React.createClass({
   },
 
   render () {
-    const { skills, body, title } = this.state;
+    const { skills, body, title, shouldUpdateList } = this.state;
 
     return (
       <div className="form-skills">
@@ -121,6 +125,7 @@ export default React.createClass({
         <SkillList
           onClick={this.handleSkillItemClick}
           skills={skills}
+          shouldUpdate={shouldUpdateList}
         />
       </div>
     );
